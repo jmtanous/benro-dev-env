@@ -1,0 +1,24 @@
+{
+  "index": "https://archive.debian.org/debian/dists/stretch/main/binary-armel/Packages.xz",
+  "purpose": "Replacement-build sysroot only; never install these libc packages on the mount. Not the SDK used for the frozen runtime.",
+  "packages": [
+    {
+      "name": "libc6",
+      "version": "2.24-11+deb9u4",
+      "url": "https://archive.debian.org/debian/pool/main/g/glibc/libc6_2.24-11+deb9u4_armel.deb",
+      "sha256": "601950cfcf0e9f705d9a2bff65351dd6e86759cb6573d5ca6ba6cbe98ffaf5d8"
+    },
+    {
+      "name": "libc6-dev",
+      "version": "2.24-11+deb9u4",
+      "url": "https://archive.debian.org/debian/pool/main/g/glibc/libc6-dev_2.24-11+deb9u4_armel.deb",
+      "sha256": "cd747f52bf0e39a7fd4f7e41508239c779079c40bc39a466372f5bba10c0933f"
+    },
+    {
+      "name": "linux-libc-dev",
+      "version": "4.9.228-1",
+      "url": "https://archive.debian.org/debian/pool/main/l/linux/linux-libc-dev_4.9.228-1_armel.deb",
+      "sha256": "c2200708e1f31ee6362293bdfafc58938340b0b415a3aaf6aa50c4aaa4d2293a"
+    }
+  ]
+}

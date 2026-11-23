@@ -1,0 +1,4 @@
+Benro development environment
+Independent ARM VM; project workspace mounted at /work.
+Target: ARM soft-float / glibc 2.24. Debian's Python is NOT a Benro release build.
+No physical mount attached. Keep application device targets on loopback for tests.

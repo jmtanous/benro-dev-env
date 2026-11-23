@@ -1,0 +1,72 @@
+#!/usr/bin/env python3
+"""Project-scoped tooling. Commands never target physical mount addresses."""
+import argparse,json,os,re,shutil,socket,subprocess
+from pathlib import Path
+shared=Path(__file__).resolve().parent
+root=Path(os.environ.get('BENRO_WORKSPACE',shared.parent)).resolve()
+p=argparse.ArgumentParser()
+p.add_argument('command',choices=['init','build','test','vm','provision','sdk'])
+p.add_argument('project')
+p.add_argument('args',nargs='*')
+a=p.parse_args()
+def ports_available(start):
+ sockets=[]
+ try:
+  for port in range(start,start+4):
+   sock=socket.socket();sockets.append(sock);sock.bind(('127.0.0.1',port))
+  return True
+ except PermissionError:
+  raise SystemExit('Cannot check localhost ports in this restricted environment. Run the initializer with local socket access.')
+ except OSError:
+  return False
+ finally:
+  for sock in sockets:sock.close()
+if not re.fullmatch(r'[a-z][a-z0-9-]{0,62}',a.project):p.error('Invalid project name')
+project=root/'projects'/a.project
+if a.command=='init':
+ if a.args:p.error('init takes only a project name')
+ used=set()
+ for config in (root/'projects').glob('*/benro-project.json'):
+  profile=json.loads(config.read_text()).get('vm_profile',{})
+  used.update(profile.get(k) for k in ['ssh','web','api','websocket'])
+ port=next(n for n in range(22000,60000,4) if not set(range(n,n+4))&used and ports_available(n))
+ project.mkdir(parents=True,exist_ok=False)
+ shutil.copytree(shared/'templates/config',project/'config')
+ (project/'src').mkdir()
+ (project/'src/main.c').write_text('#include <stdio.h>\nint main(void) { puts("'+a.project+' ARM starter"); return 0; }\n')
+ (project/'VERSION').write_text('0.1.0-dev\n')
+ (project/'.gitignore').write_text('workspace/build/\nworkspace/benro-sdk/\nstate/\nartifacts/\n*.qcow2\n*.key\n.env\n')
+ (project/'README.md').write_text('# '+a.project+'\n\nRun benro-dev sdk '+a.project+' fetch, then sdk '+a.project+' prepare.\nUse benro-dev build '+a.project+' and test '+a.project+' for the ARM starter.\nOptional: benro-dev provision '+a.project+' builds a new isolated VM.\nReplace the example and build/test commands for this project.\nAdding this application to MMT requires a dedicated app integration and release.\n')
+ config={'build':['bash','build.sh'],'test':['bash','build.sh','test'],'vm':['./vm'],
+  'vm_profile':{'name':'benro-'+a.project,'ssh':port,'web':port+1,'api':port+2,'websocket':port+3}}
+ (project/'benro-project.json').write_text(json.dumps(config,indent=2)+'\n')
+ (project/'build.sh').write_text('''#!/usr/bin/env bash
+set -euo pipefail
+project_dir=$(cd "$(dirname "$0")" && pwd)
+shared=${BENRO_DEV_ENV:-"$project_dir/../../dev-env"}
+exec bash "$shared/scripts/run-tool.sh" "$project_dir" bash /benro-dev-env/scripts/build-example.sh "${1:-build}"
+''')
+ (project/'vm').write_text('''#!/usr/bin/env bash
+set -euo pipefail
+project_dir=$(cd "$(dirname "$0")" && pwd)
+exec python3 "${BENRO_DEV_ENV:-$project_dir/../../dev-env}/scripts/run-vm.py" "$project_dir" "$@"
+''');(project/'vm').chmod(0o755)
+ subprocess.run(['git','init','-q',str(project)],check=True)
+ print(project)
+elif a.command=='provision':
+ if a.args:p.error('provision takes only a project name')
+ subprocess.run(['bash',str(shared/'scripts/provision.sh'),str(project)],check=True)
+elif a.command=='sdk':
+ if a.args==['fetch']:
+  subprocess.run(['python3',str(shared/'scripts/prepare-sdk.py'),'--project',str(project),'--fetch'],check=True)
+ elif a.args==['prepare']:
+  subprocess.run(['bash',str(shared/'scripts/run-tool.sh'),str(project),'python3','/benro-dev-env/scripts/prepare-sdk.py','--project','/project','--output','/project/workspace/benro-sdk/sysroot'],check=True)
+ else:p.error('Use sdk PROJECT fetch or sdk PROJECT prepare')
+else:
+ config=json.loads((project/'benro-project.json').read_text())
+ if a.command=='vm':
+  if not a.args or a.args[0] not in ['start','stop','status','ssh','snapshot','restore','logs']:p.error('Specify a supported VM action')
+  command=config.get('vm')
+  if not command:p.error('This project has no VM profile')
+ else:command=config[a.command]
+ subprocess.run(command+a.args,cwd=project,check=True)

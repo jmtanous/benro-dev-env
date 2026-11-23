@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-23",
+  "shared_tooling_version": "0.1.0-rc.1",
+  "profile_tests_passed": 5,
+  "sdk_packages_verified": 3,
+  "arm_starter": {
+    "result": "passed",
+    "glibc_max": [
+      2,
+      4
+    ],
+    "physical_acceptance": false
+  },
+  "fresh_vm_provisioning": "BENRO_BOOTSTRAP_SUCCEEDED",
+  "guest_arch": "armv7l",
+  "ssh_and_starter_execution": "passed",
+  "project_keys_distinct": true,
+  "no_inherited_simulator": true,
+  "clean_shutdown": "passed",
+  "python_lab_unaffected": "remained running",
+  "vm_profile": {
+    "name": "benro-environment-smoke",
+    "ssh": 22004,
+    "web": 22005,
+    "api": 22006,
+    "websocket": 22007
+  },
+  "physical_device_contacted": false,
+  "published": false,
+  "guest_packages_lock_sha256": "e7ff914dcf095af0f6ef7c7d91fe21d5bbe51e21f4a7c898aac165ebba0f5a55",
+  "missing_tool_image_bootstrap": "command-order test passed"
+}

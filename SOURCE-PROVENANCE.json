@@ -1,0 +1,33 @@
+{
+  "origin": "Benro lab recipes and public SDK inputs, extracted for reuse",
+  "sources": [
+    {
+      "source_path": "scripts/build.sh",
+      "sha256": "433b64e6fa77fc5833b6fc0bfc0d5b71edb4b3028ad4c426248cb901c02aebc3"
+    },
+    {
+      "source_path": "scripts/prepare-rootfs.sh",
+      "sha256": "08e642700d8bd6f2835eb020ea2edee0cce9bd3458579e310e2104f61e8d2b81"
+    },
+    {
+      "source_path": "scripts/guest-bootstrap.sh",
+      "sha256": "02506f4216a1c2e7933986183a471731ae75198d7119b639a25bbbd058a09683"
+    },
+    {
+      "source_path": "scripts/make-image.sh",
+      "sha256": "57282070062a74c12293bd741f900b778f963c913797b73feddaf53e78acf415"
+    },
+    {
+      "source_path": "workspace/python/prepare-public-sdk.py",
+      "sha256": "70560802729ca7958da3e07a789b33b035a5a69b17e4c6aa022413c7b0846c1a"
+    },
+    {
+      "source_path": "workspace/python/public-sdk.json",
+      "sha256": "01c62c1ebc5e10f51184a32eb57658a41d41403717558f2ee6c45de8081292db"
+    },
+    {
+      "source_path": "Dockerfile",
+      "sha256": "d7046738b1d155a74ad5768b7e6ad5003c5dfc2526799baf598958faf86c480d"
+    }
+  ]
+}
