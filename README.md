@@ -2,7 +2,8 @@
 
 A separate source repository for shared Benro development tooling. Project source,
 versioned application packages and MMT integrations live in their own repositories.
-This repository has not yet been published to GitHub.
+Public source: https://github.com/jmtanous/benro-dev-env.
+Application packages and MMT releases remain in their existing repositories.
 
 ## Workspace
 
@@ -76,4 +77,4 @@ See VALIDATION.json. Hardware acceptance is outside these checks.
 
 Publish source, recipes and tests only. Never add VM images, captured firmware,
 SDK archives, device configuration, SSH keys, signing material or build outputs.
-Preserve upstream notices for reused recipes. No remote publication has occurred.
+Preserve upstream notices for reused recipes. Only the reviewed source, recipes and tests are published.

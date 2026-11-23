@@ -26,7 +26,8 @@
     "websocket": 22007
   },
   "physical_device_contacted": false,
-  "published": false,
+  "published": true,
   "guest_packages_lock_sha256": "e7ff914dcf095af0f6ef7c7d91fe21d5bbe51e21f4a7c898aac165ebba0f5a55",
-  "missing_tool_image_bootstrap": "command-order test passed"
+  "missing_tool_image_bootstrap": "command-order test passed",
+  "repository": "https://github.com/jmtanous/benro-dev-env"
 }
